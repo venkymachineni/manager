@@ -1,0 +1,60 @@
+_schema-version: '3.1'
+ID: manager
+version: 1.0.0
+description: "A simple CAP project."
+parameters:
+  enable-parallel-deployments: true
+build-parameters:
+  before-all:
+    - builder: custom
+      commands:
+        - npx cds build --production
+modules:
+  - name: manager-srv
+    type: nodejs
+    path: gen/srv
+    parameters:
+      buildpack: nodejs_buildpack
+    build-parameters:
+      builder: npm
+    provides:
+      - name: srv-api # required by consumers of CAP services (e.g. approuter)
+        properties:
+          srv-url: ${default-url}
+    requires:
+      - name: manager-db
+
+  - name: manager-db-deployer
+    type: hdb
+    path: gen/db
+    parameters:
+      buildpack: nodejs_buildpack
+    requires:
+      - name: manager-db
+        properties:                         ##+++
+          TARGET_CONTAINER: manager_HDI      ##+++
+
+##---------------------------------------------------------
+      - name: employee-db-grantor
+        group: SERVICE_REPLACEMENTS
+        properties:
+          key: logical-employee-db-grantor
+          service: ${employee-db-grantor-service}   
+##---------------------------------------------------------
+resources:
+  - name: manager-db
+    type: com.sap.xs.hdi-container
+    parameters:
+      config:                       ##+++
+        schema: manager_HDI
+      service: hana
+      service-name: manager_HDI  ##+++
+      service-plan: hdi-shared
+  ##---------------------------------------------------------
+  - name: employee-db-grantor
+    type: org.cloudfoundry.existing-service
+    parameters:
+     service-name: employee-db
+    properties:
+     hana_syn-grantor-service: ${service-name}
+##---------------------------------------------------------

@@ -1,0 +1,15 @@
+{
+     "CAPM_REUSE_MANAGER_SYN_EMPLOYEES": {
+        "target": {
+            "object": "CAPM_REUSE_HDI_EMPLOYEE",
+            "schema.configure": "logical-employee-db-grantor/schema"
+        }        
+    },
+    "CAPM_REUSE_MANAGER_SYN_COMPANY": {
+        "target": {
+            "object": "CAPM_REUSE_HDI_COMPANY",
+            "schema.configure": "logical-employee-db-grantor/schema"
+        }        
+    }
+
+}

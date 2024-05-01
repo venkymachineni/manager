@@ -1,0 +1,14 @@
+{
+    "logical-employee-db-grantor" : {
+      "object_owner" : {
+        "container_roles" : [
+            "com.partha.testhana1::ZPARHANAHDI_access_g#"
+        ]
+      },
+      "application_user" : {
+        "container_roles" : [
+            "com.partha.testhana1::ZPARHANAHDI_access"
+        ]
+      }
+    }
+}
